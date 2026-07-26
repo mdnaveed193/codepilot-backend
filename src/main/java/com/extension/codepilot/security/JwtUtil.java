@@ -15,65 +15,50 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtUtil {
 
-    @Value("${jwt.secret}")
-    private String secret;
+	@Value("${jwt.secret}")
+	private String secret;
 
-    @Value("${jwt.expiration}")
-    private long expiration;
+	@Value("${jwt.expiration}")
+	private long expiration;
 
-  
-    private SecretKey getSigningKey() {
-        return Keys.hmacShaKeyFor(secret.getBytes());
-    }
+	private SecretKey getSigningKey() {
+		return Keys.hmacShaKeyFor(secret.getBytes());
+	}
 
-   
-    public String generateToken(Long githubId) {
+	public String generateToken(Long githubId) {
 
-        Date currentDate = new Date();
-        Date expiryDate = new Date(currentDate.getTime() + expiration);
+		Date currentDate = new Date();
+		Date expiryDate = new Date(currentDate.getTime() + expiration);
 
-        return Jwts.builder()
-                .claim("githubId", githubId)
-                .issuedAt(currentDate)
-                .expiration(expiryDate)
-                .signWith(getSigningKey())   // HS256 is automatically selected
-                .compact();
-    }
+		return Jwts.builder().claim("githubId", githubId).issuedAt(currentDate).expiration(expiryDate)
+				.signWith(getSigningKey()) // HS256 is automatically selected
+				.compact();
+	}
 
-   
-    private Claims extractAllClaims(String token) {
+	private Claims extractAllClaims(String token) {
 
-        return Jwts.parser()
-                .verifyWith(getSigningKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
-    }
+		return Jwts.parser().verifyWith(getSigningKey()).build().parseSignedClaims(token).getPayload();
+	}
 
-  
-    public Long extractUserId(String token) {
+	public Long extractUserId(String token) {
 
-        Claims claims = extractAllClaims(token);
+		Claims claims = extractAllClaims(token);
 
-        return claims.get("githubId", Long.class);
-    }
+		return claims.get("githubId", Long.class);
+	}
 
-  
-    public boolean validateToken(String token) {
+	public boolean validateToken(String token) {
 
-        try {
+		try {
 
-            Jwts.parser()
-                    .verifyWith(getSigningKey())
-                    .build()
-                    .parseSignedClaims(token);
+			Jwts.parser().verifyWith(getSigningKey()).build().parseSignedClaims(token);
 
-            return true;
+			return true;
 
-        } catch (Exception exception) {
+		} catch (Exception exception) {
 
-            return false;
-        }
-    }
+			return false;
+		}
+	}
 
 }

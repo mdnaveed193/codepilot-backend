@@ -32,14 +32,11 @@ public class SecurityConfig {
 		CorsConfiguration configuration = new CorsConfiguration();
 
 		configuration.setAllowedOrigins(
-				List.of("http://localhost:5173", 
-				"chrome-extension://nlgnidgnhegkeekklfcclkoiccafodan"
-			));
+				List.of("http://localhost:5173", "chrome-extension://nlgnidgnhegkeekklfcclkoiccafodan"));
 
 		configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
-		configuration.setAllowedHeaders(List.of( "Authorization",
-                        "Content-Type"));
+		configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
 
 		// configuration.setAllowCredentials(true);
 		configuration.setAllowCredentials(false);
@@ -53,17 +50,12 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-		httpSecurity
-		.cors(cors ->
-                        cors.configurationSource(
-                                corsConfigurationSource()
-                        )
-                )
-		.csrf(csrf -> csrf.disable())
+		httpSecurity.cors(cors -> cors.configurationSource(corsConfigurationSource())).csrf(csrf -> csrf.disable())
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				.authorizeHttpRequests(authorize -> authorize.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-						.requestMatchers("/", "/hello", "/oauth2/**", "/login/**", "/auth/**", "/oauth-success.html").permitAll()
+						.requestMatchers("/", "/hello", "/oauth2/**", "/login/**", "/auth/**", "/oauth-success.html")
+						.permitAll()
 
 						.anyRequest().authenticated())
 

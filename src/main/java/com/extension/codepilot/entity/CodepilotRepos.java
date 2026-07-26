@@ -34,14 +34,11 @@ public class CodepilotRepos {
 	private String htmlUrl;
 
 	private String defaultBranch;
-	
 
-    private LocalDateTime createdAt;
+	private LocalDateTime createdAt;
 
-    
-    // Many repositories can belong to one user.
-     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+	// Many repositories can belong to one user.
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id", nullable = false)
+	private User user;
 }

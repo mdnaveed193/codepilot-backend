@@ -7,9 +7,9 @@ import lombok.Data;
 @AllArgsConstructor
 public class RepoCheckResp {
 
-	 private String repositoryName;
+	private String repositoryName;
 
-	    private Boolean available;
+	private Boolean available;
 
-	    private String message;
+	private String message;
 }

@@ -4,15 +4,15 @@ import lombok.Data;
 
 @Data
 public class GithubUserDto {
-	 private Long githubId;
+	private Long githubId;
 
-	    private String githubUsername;
+	private String githubUsername;
 
-	    private String name;
+	private String name;
 
-	    private String email;
+	private String email;
 
-	    private String avatar_url;
+	private String avatar_url;
 
-	    private String accessToken;
+	private String accessToken;
 }

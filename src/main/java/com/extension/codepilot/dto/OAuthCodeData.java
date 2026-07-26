@@ -8,8 +8,8 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class OAuthCodeData {
-    private String token;
-    private String username;
+	private String token;
+	private String username;
 
-    private LocalDateTime expiresAt;
+	private LocalDateTime expiresAt;
 }

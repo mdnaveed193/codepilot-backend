@@ -34,15 +34,6 @@ public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
 	@Autowired
 	private JwtUtil jwtUtil;
 
-//	 public OAuthSuccessHandler(AuthService authService, OAuth2AuthorizedClientService authorizedClientService,JwtUtil jwtUtil) {
-//
-//        this.authService = authService;
-//
-//        this.authorizedClientService = authorizedClientService;
-//
-//        this.jwtUtil = jwtUtil;
-//    }
-
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 			Authentication authentication) throws IOException, ServletException {
@@ -96,53 +87,6 @@ public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
 				+ URLEncoder.encode(oneTimeCode, StandardCharsets.UTF_8);
 
 		response.sendRedirect(redirectUrl);
-		// response.sendRedirect(
-		// "http://localhost:8080/oauth-success.html?code=" + exchangeCode
-		// );
-
-		// String jwt = jwtUtil.generateToken(user.getGithubId());
-
-		// String exchangeCode = authService.createOneTimeCode(jwt,
-		// user.getGithubUsername());
-
-		// String extensionId = request.getParameter("extId");
-
-		// if (extensionId == null || extensionId.isBlank()) {
-		// extensionId = "nlgnidgnhegkeekklfcclkoiccafodan";
-		// }
-
-		// String redirectUrl = "http://localhost:5173/#/oauth/success"
-		// + "?code=" + exchangeCode
-		// + "&username=" + user.getGithubUsername()
-		// + "&extId=" + extensionId;
-
-		// response.sendRedirect(redirectUrl);
-
-// 		String jwt =
-//         jwtUtil.generateToken(
-//                 user.getGithubId()
-//         );
-
-// String extensionId =
-//         request.getParameter("extId");
-
-// if (
-//         extensionId == null ||
-//         extensionId.isBlank()
-// ) {
-//     extensionId =
-//             "nlgnidgnhegkeekklfcclkoiccafodan";
-// }
-
-// String redirectUrl =
-//         "http://localhost:5173/#/oauth/success"
-//                 + "?token=" + URLEncoder.encode(jwt, StandardCharsets.UTF_8)
-//                 + "&username=" + URLEncoder.encode(user.getGithubUsername(), StandardCharsets.UTF_8)
-//                 + "&extId=" + URLEncoder.encode(extensionId, StandardCharsets.UTF_8);
-
-// response.sendRedirect(
-//         redirectUrl
-// );
 
 	}
 

@@ -51,10 +51,6 @@ public class GithubApiService {
 
 		try {
 
-//			restClient.post().uri(url).contentType(MediaType.APPLICATION_JSON)
-//					.header("Authorization", "Bearer " + accessToken).header("Accept", "application/vnd.github+json")
-//					.body(body).retrieve().toBodilessEntity();
-
 			System.out.println("Repository created successfully.");
 			return restClient.post().uri(url).contentType(MediaType.APPLICATION_JSON)
 					.header("Authorization", "Bearer " + accessToken).header("Accept", "application/vnd.github+json")

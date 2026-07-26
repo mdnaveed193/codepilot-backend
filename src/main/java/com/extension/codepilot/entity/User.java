@@ -20,43 +20,32 @@ import lombok.Data;
 @Table(name = "users")
 @Data
 public class User {
-	
+
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    // GitHub's permanent user ID
-    @Column(unique = true)
-    private Long githubId;
+	// GitHub's permanent user ID
+	@Column(unique = true)
+	private Long githubId;
 
-    @Column(unique = true)
-    private String githubUsername;
+	@Column(unique = true)
+	private String githubUsername;
 
-    private String name;
+	private String name;
 	private String email;
 	private String avatar;
-	
+
 	private String avatarUrl;
 
-    @Lob
-    private String accessToken;
+	@Lob
+	private String accessToken;
 
-    
-//    private String repositoryName;
-//
-//    private String defaultBranch;
-//
-//    private Boolean repositoryCreated;
-    
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    private List<CodepilotRepos> repositories = new ArrayList<>();
-    
-   
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	private List<CodepilotRepos> repositories = new ArrayList<>();
 
-//    private String installationType;
+	private LocalDateTime createdAt;
 
-    private LocalDateTime createdAt;
-
-    private LocalDateTime updatedAt;
+	private LocalDateTime updatedAt;
 
 }

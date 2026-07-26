@@ -50,26 +50,11 @@ public class AuthService {
 		String encryptedAccessToken = encryptionService.encrypt(githubUserDto.getAccessToken());
 
 		user.setAccessToken(encryptedAccessToken);
-//		user.setAccessToken(githubUserDto.getAccessToken());
 		user.setUpdatedAt(LocalDateTime.now());
-
-//		if (user.getRepositoryName() == null) {
-//			user.setRepositoryName("DSA-Questions");
-//		}
 
 		return userDao.save(user);
 
 	}
-
-	// public String createOneTimeCode(String jwt) {
-	// String code = UUID.randomUUID().toString();
-	// oneTimeCodeStore.put(code, jwt);
-	// return code;
-	// }
-
-	// public String exchangeOneTimeCode(String code) {
-	// return oneTimeCodeStore.remove(code);
-	// }
 
 	public OAuthCodeData exchangeOneTimeCode(String code) {
 
@@ -102,7 +87,4 @@ public class AuthService {
 		return code;
 	}
 
-	// public OAuthCodeData exchangeOneTimeCode(String code) {
-	// return oneTimeCodeStore.remove(code);
-	// }
 }

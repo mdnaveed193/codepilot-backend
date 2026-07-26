@@ -8,5 +8,5 @@ public interface UserRepo extends JpaRepository<User, Long> {
 
 	User findByGithubId(Long githubId);
 
-    User findByGithubUsername(String githubUsername);
+	User findByGithubUsername(String githubUsername);
 }

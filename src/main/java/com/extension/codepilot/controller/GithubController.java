@@ -17,7 +17,6 @@ import com.extension.codepilot.dto.CreateRepoRequest;
 import com.extension.codepilot.dto.GithubRepoResp;
 import com.extension.codepilot.dto.PushRequest;
 import com.extension.codepilot.dto.RepoCheckResp;
-//import com.extension.codepilot.service.GithubPushService;
 import com.extension.codepilot.service.GithubPushService;
 
 @RestController
@@ -28,32 +27,20 @@ public class GithubController {
 	@Autowired
 	private GithubPushService githubPushService;
 
-	// @PostMapping("/push")
-	// public String pushSolution(@RequestBody PushRequest pushRequest, Authentication authentication) {
-
-	// 	System.out.println("push api is called");
-	// 	return githubPushService.pushSolution(pushRequest, authentication);
-	// }
-
 	@PostMapping("/push")
-public ResponseEntity<?> pushSolution(
-        @RequestBody PushRequest pushRequest,
-        Authentication authentication
-) {
+	public ResponseEntity<?> pushSolution(@RequestBody PushRequest pushRequest, Authentication authentication) {
 
-    System.out.println("push api is called");
+		System.out.println("push api is called");
 
-    return githubPushService.pushSolution(
-            pushRequest,
-            authentication
-    );
-}
+		return githubPushService.pushSolution(pushRequest, authentication);
+	}
 
 	@GetMapping("/repos/check")
 	public RepoCheckResp checkRepositoryAvailability(@RequestParam String repositoryName,
 			Authentication authentication) {
 
 		return githubPushService.checkRepositoryAvailability(repositoryName, authentication);
+
 	}
 
 	@GetMapping("/repos")
@@ -66,5 +53,6 @@ public ResponseEntity<?> pushSolution(
 	public GithubRepoResp createRepository(@RequestBody CreateRepoRequest request, Authentication authentication) {
 
 		return githubPushService.createRepository(request, authentication);
+
 	}
 }
