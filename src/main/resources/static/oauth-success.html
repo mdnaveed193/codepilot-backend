@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Signing you in</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+      margin: 0;
+      background: #f4f7fb;
+      color: #223;
+    }
+    .card {
+      background: white;
+      padding: 24px 28px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      text-align: center;
+      max-width: 420px;
+    }
+    button {
+      margin-top: 12px;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 8px;
+      background: #2563eb;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Completing sign-in...</h2>
+    <p id="message">Finishing authentication securely.</p>
+  </div>
+
+  <script>
+    async function completeLogin() {
+      const params = new URLSearchParams(window.location.search);
+      const code = params.get('code');
+
+      if (!code) {
+        document.getElementById('message').textContent = 'Missing login code.';
+        return;
+      }
+
+      try {
+        const response = await fetch('http://localhost:8080/auth/exchange-code', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code })
+        });
+
+        if (!response.ok) {
+          throw new Error('Exchange failed');
+        }
+
+        const data = await response.json();
+        localStorage.setItem('jwtToken', data.token);
+
+        if (window.opener) {
+          window.opener.postMessage({ type: 'oauth-success', token: data.token }, '*');
+        }
+
+        window.close();
+        document.getElementById('message').textContent = 'Login complete. You can close this page now.';
+      } catch (error) {
+        document.getElementById('message').textContent = 'Authentication failed. Please try again.';
+      }
+    }
+
+    completeLogin();
+  </script>
+</body>
+</html>
