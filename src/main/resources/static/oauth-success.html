@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -76,5 +76,191 @@
 
     completeLogin();
   </script>
+</body>
+</html> -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>CodePilot Authentication</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: grid;
+            place-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: #f4f7fb;
+            color: #223;
+        }
+
+        .card {
+            background: white;
+            padding: 24px 28px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            max-width: 420px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+    <h2>GitHub Authentication</h2>
+
+    <p id="message">
+        Completing authentication...
+    </p>
+</div>
+
+<script>
+    /*
+     * This must be the ID of the installed CodePilot extension.
+     *
+     * When you publish CodePilot to the Chrome Web Store,
+     * verify the permanent extension ID and update this value
+     * if the ID changes.
+     */
+    const EXTENSION_ID =
+        "nlgnidgnhegkeekklfcclkoiccafodan";
+
+    async function completeLogin() {
+        const messageElement =
+            document.getElementById("message");
+
+        const params =
+            new URLSearchParams(
+                window.location.search
+            );
+
+        const code =
+            params.get("code");
+
+        if (!code) {
+            messageElement.textContent =
+                "Authentication failed. Missing login code.";
+
+            return;
+        }
+
+        try {
+            /*
+             * This page is already running from the Render backend.
+             *
+             * Therefore, a relative URL automatically calls:
+             *
+             * https://codepilot-backend-1.onrender.com/auth/exchange-code
+             */
+            const response =
+                await fetch(
+                    "/auth/exchange-code",
+                    {
+                        method: "POST",
+
+                        headers: {
+                            "Content-Type":
+                                "application/json"
+                        },
+
+                        body: JSON.stringify({
+                            code: code
+                        })
+                    }
+                );
+
+            if (!response.ok) {
+                messageElement.textContent =
+                    "Authentication failed. The login code is invalid or expired.";
+
+                return;
+            }
+
+            const authData =
+                await response.json();
+
+            const token =
+                authData.token;
+
+            const username =
+                authData.username;
+
+            if (!token || !username) {
+                messageElement.textContent =
+                    "Authentication failed. Invalid login information was received.";
+
+                return;
+            }
+
+            /*
+             * A normal website can send a message to an extension
+             * only when the website is listed in externally_connectable.
+             */
+            if (
+                typeof chrome === "undefined" ||
+                !chrome.runtime ||
+                !chrome.runtime.sendMessage
+            ) {
+                messageElement.textContent =
+                    "GitHub login succeeded, but CodePilot could not be contacted. Make sure the extension is installed.";
+
+                return;
+            }
+
+            chrome.runtime.sendMessage(
+                EXTENSION_ID,
+                {
+                    type: "STORE_AUTH_DATA",
+                    token: token,
+                    username: username
+                },
+                (extensionResponse) => {
+
+                    if (chrome.runtime.lastError) {
+                        console.error(
+                            "Extension messaging failed:",
+                            chrome.runtime.lastError.message
+                        );
+
+                        messageElement.textContent =
+                            "GitHub login succeeded, but CodePilot could not save the login. Check that the extension is installed and enabled.";
+
+                        return;
+                    }
+
+                    if (extensionResponse?.success) {
+                        messageElement.textContent =
+                            `GitHub connected successfully as @${username}. You can close this tab.`;
+                    } else {
+                        messageElement.textContent =
+                            "CodePilot could not save the login information.";
+                    }
+                }
+            );
+
+        } catch (error) {
+            console.error(
+                "OAuth completion failed:",
+                error
+            );
+
+            messageElement.textContent =
+                "Authentication failed. Please try again.";
+        }
+    }
+
+    completeLogin();
+</script>
+
 </body>
 </html>

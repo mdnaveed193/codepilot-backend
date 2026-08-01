@@ -12,6 +12,8 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import com.extension.codepilot.dto.GithubUserDto;
 import com.extension.codepilot.entity.User;
 import com.extension.codepilot.service.AuthService;
@@ -33,6 +35,9 @@ public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
 
 	@Autowired
 	private JwtUtil jwtUtil;
+
+	@Value("${codepilot.oauth-success-url}")
+	private String oauthSuccessUrl;
 
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -83,7 +88,7 @@ public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
 		String jwt = jwtUtil.generateToken(user.getGithubId());
 		String oneTimeCode = authService.createOneTimeCode(jwt, user.getGithubUsername());
 
-		String redirectUrl = "http://localhost:5173/#/oauth/success" + "?code="
+		String redirectUrl = oauthSuccessUrl + "?code="
 				+ URLEncoder.encode(oneTimeCode, StandardCharsets.UTF_8);
 
 		response.sendRedirect(redirectUrl);
