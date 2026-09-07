@@ -16,7 +16,7 @@ import com.extension.codepilot.service.AuthService;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin(origins = { "http://localhost:5173", "chrome-extension://nlgnidgnhegkeekklfcclkoiccafodan" })
+//@CrossOrigin(origins = { "http://localhost:5173", "chrome-extension://nlgnidgnhegkeekklfcclkoiccafodan" })
 public class AuthController {
 
 	@Autowired
