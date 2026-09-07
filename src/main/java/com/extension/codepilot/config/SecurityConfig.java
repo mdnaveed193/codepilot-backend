@@ -3,6 +3,7 @@ package com.extension.codepilot.config;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -26,13 +27,18 @@ public class SecurityConfig {
 	@Autowired
 	private JwtAuthenticationFilter jwtAuthFilter;
 
+	@Value("${codepilot.extension-id}")
+	private String extensionId;
+
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 
 		CorsConfiguration configuration = new CorsConfiguration();
 
 		configuration.setAllowedOrigins(
-				List.of("http://localhost:5173", "chrome-extension://nlgnidgnhegkeekklfcclkoiccafodan"));
+				// List.of("http://localhost:5173",
+				// "chrome-extension://nlgnidgnhegkeekklfcclkoiccafodan")
+				List.of("http://localhost:5173", "chrome-extension://" + extensionId));
 
 		configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
